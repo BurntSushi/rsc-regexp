@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Usage: 'torture-test <command> ...' to test a specific implementation.
+#
+# This tests a particular workload that is meant to stress the Thompson NFA
+# simulation. We achieve this by building a very large regex consisting of the
+# same pattern repeated as an alternation over and over. We construct it (and
+# the haystack) in a way that every alternation has the possibility of matching
+# and thus isn't ruled out. We construct the last alternation to actually match
+# so we can check the regex works correctly.
+#
+# This overall results in the matching engine shuffling states constantly at
+# every byte in the haystack.
+#
+# The specific lengths of the pattern and haystack strings were chosen
+# empirically based on limits. The pattern limits should generally be limited
+# by the program itself, as the original program imposes limits on the length
+# (and nesting depth) of the pattern. The haystack limits are just whatever
+# your system can abide as an argument to the program. On my Linux system for
+# example:
+#
+#     $ getconf ARG_MAX
+#     2097152
+#
+# It would be better to accept the pattern and haystack via files, but we
+# can do enough torturing without it. (This would also alter the simplistic
+# character of the program to an undesirable point IMO.)
+
+# cd to the directory containing this script.
+cd "$(dirname "$0")"
+
+# I used this to generate the input files once.
+# It's slow enough to do this every time that it's
+# worth not repeating it.
+# pattern="$(for ((i=0;i<475;i++)); do printf "(abc)*d|"; done)(abc)*Z"
+# echo -n "$pattern" > torture-test.pattern
+# haystack="$(for ((i=0;i<43000;i++)); do printf "abc"; done)Z"
+# echo -n "$haystack" > torture-test.haystack
+lines="$($* "$(<torture-test.pattern)" "$(<torture-test.haystack)" | wc -l)"
+if [ "${lines:0}" = 1 ]; then
+  echo PASSED
+  exit 0
+else
+  echo FAILED
+  exit 1
+fi

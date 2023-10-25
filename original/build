@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Sanitize is off by default. When enabled, asan and ubsan are turned on.
+: "${SANITIZE:=}"
+
+# cd to the directory containing this script.
+cd "$(dirname "$0")"
+
+if [ -n "$SANITIZE" ]; then
+  # Use this to catch UB and memory leaks. Try `nfa 'a|' 'a'`.
+  exec clang -O3 -o nfa -g -fsanitize=undefined,address nfa.c
+else
+  exec clang -O3 -o nfa -g nfa.c
+fi

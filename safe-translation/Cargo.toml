@@ -1,0 +1,11 @@
+[package]
+name = "safe-translation"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "nfa"
+path = "nfa.rs"
+
+[profile.release]
+debug = true

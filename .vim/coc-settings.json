@@ -1,0 +1,7 @@
+{
+  "rust-analyzer.linkedProjects": [
+    "dumb-translation/Cargo.toml",
+    "idiomatic-translation/Cargo.toml",
+    "safe-translation/Cargo.toml"
+  ]
+}
