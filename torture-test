@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Usage: 'torture-test <command> ...' to test a specific implementation.
 #
