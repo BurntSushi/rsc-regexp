@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Usage: 'test <command> ...' to test a specific implementation, or
 # 'test <name>' as a shortcut to test a specific implementation or all
